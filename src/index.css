@@ -257,3 +257,9 @@ progress {
   font-size: inherit;
   padding: 0.8rem;
 }
+
+.luckiest-guy-regular {
+  font-family: "Luckiest Guy", serif;
+  font-weight: 400;
+  font-style: normal;
+}
