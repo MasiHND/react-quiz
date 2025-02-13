@@ -12,6 +12,7 @@ import Progress from "./components/Progress.jsx";
 import FinishScreen from "./components/FinishScreen.jsx";
 import Footer from "./components/Footer.jsx";
 import Timer from "./components/Timer.jsx";
+import AppFooter from "./components/AppFooter.jsx";
 
 const initialState = {
   questions: [],
@@ -142,6 +143,7 @@ function App() {
           />
         )}
       </MainLayout>
+      <AppFooter/>
     </div>
   );
 }
