@@ -24,7 +24,7 @@ const initialState = {
   secondsRemaining: null,
 };
 
-const secsPerQuestions= 30;
+const secsPerQuestions = 30;
 
 function reducer(state, action) {
   switch (action.type) {
@@ -35,7 +35,11 @@ function reducer(state, action) {
       return { ...state, status: "error" };
 
     case "start":
-      return { ...state, status: "active" , secondsRemaining: state.questions.length * secsPerQuestions};
+      return {
+        ...state,
+        status: "active",
+        secondsRemaining: state.questions.length * secsPerQuestions,
+      };
 
     case "newAnswer":
       const question = state.questions.at(state.index);
@@ -68,10 +72,12 @@ function reducer(state, action) {
         status: "ready",
       };
 
-      case "tick":
-        return { ...state, secondsRemaining: state.secondsRemaining - 1,
-          status: state.secondsRemaining === 0 ? "done" : state.status
-         };
+    case "tick":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "done" : state.status,
+      };
 
     default:
       throw new Error("Action Unknown");
@@ -94,57 +100,62 @@ function App() {
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
   return (
-    <div className="app">
-      <Header />
+    <>
+      <div className="app">
+        <Header />
 
-      <MainLayout className="main">
-        {status === "loading" && <Loader />}
+        <MainLayout className="main">
+          {status === "loading" && <Loader />}
 
-        {status === "error" && <Error />}
+          {status === "error" && <Error />}
 
-        {status === "ready" && (
-          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
-        )}
+          {status === "ready" && (
+            <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+          )}
 
-        {status === "active" && (
-          <>
-            <Progress
-              index={index}
-              numQuestions={numQuestions}
-              points={points}
-              maxPoints={maxPoints}
-              answer={answer}
-            />
-
-            <Question
-              question={questions[index]}
-              dispatch={dispatch}
-              answer={answer}
-            />
-
-            <Footer>
-              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
-              <NextButton
-                dispatch={dispatch}
-                answer={answer}
+          {status === "active" && (
+            <>
+              <Progress
                 index={index}
                 numQuestions={numQuestions}
+                points={points}
+                maxPoints={maxPoints}
+                answer={answer}
               />
-            </Footer>
-          </>
-        )}
 
-        {status === "done" && (
-          <FinishScreen
-            points={points}
-            maxPoints={maxPoints}
-            highscore={highscore}
-            dispatch={dispatch}
-          />
-        )}
-      </MainLayout>
-      <AppFooter/>
-    </div>
+              <Question
+                question={questions[index]}
+                dispatch={dispatch}
+                answer={answer}
+              />
+
+              <Footer>
+                <Timer
+                  dispatch={dispatch}
+                  secondsRemaining={secondsRemaining}
+                />
+                <NextButton
+                  dispatch={dispatch}
+                  answer={answer}
+                  index={index}
+                  numQuestions={numQuestions}
+                />
+              </Footer>
+            </>
+          )}
+
+          {status === "done" && (
+            <FinishScreen
+              points={points}
+              maxPoints={maxPoints}
+              highscore={highscore}
+              dispatch={dispatch}
+            />
+          )}
+        </MainLayout>
+      </div>
+      <AppFooter />
+    </>
   );
 }
 
